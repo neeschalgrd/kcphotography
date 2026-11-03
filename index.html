@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="KC Photography: wedding and event photography in Australia.">
 <title>KC Photography</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +23,11 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
-body { background: var(--bg); color: var(--fg); font-family: var(--body); font-weight: 300; font-size: 17px; line-height: 1.65; overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-weight: 300; font-size: 17px; line-height: 1.65; overflow-x: hidden; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
 a { color: inherit; }
 :focus-visible { outline: 1.5px solid var(--tungsten); outline-offset: 3px; }
@@ -133,6 +141,8 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .about .ph { max-width: 420px; }
 }
 </style>
+</head>
+<body>
 
 <header class="nav">
   <div class="wrap">
@@ -356,3 +366,5 @@ document.getElementById("form").addEventListener("submit", e => {
   note.textContent = "Preview only: the form isn't connected to an inbox yet.";
 });
 </script>
+</body>
+</html>
