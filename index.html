@@ -1,0 +1,358 @@
+<title>KC Photography</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: a dark gallery wall. Full-bleed hero frame, contact-sheet grid with film-edge frame numbers, quiet editorial text between. */
+:root {
+  --bg: #100e0d;          /* warm charcoal, like a dim reception hall */
+  --surface: #1a1716;
+  --line: #2c2725;
+  --fg: #ebe4dc;
+  --muted: #9a8f86;
+  --tungsten: #d2a868;    /* candlelight / tungsten amber accent */
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-weight: 300; font-size: 17px; line-height: 1.65; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: inherit; }
+:focus-visible { outline: 1.5px solid var(--tungsten); outline-offset: 3px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--tungsten); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h2 { font-size: clamp(34px, 5vw, 56px); line-height: 1.05; }
+h2 em, h1 em { font-style: italic; color: var(--tungsten); }
+
+/* Nav */
+header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; }
+.logo { font-family: var(--display); font-size: 22px; text-decoration: none; letter-spacing: .02em; white-space: nowrap; }
+.logo span { font-style: italic; color: var(--tungsten); }
+.nav nav { display: flex; gap: clamp(14px, 3vw, 34px); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+.nav nav a { text-decoration: none; color: var(--muted); transition: color .2s; }
+.nav nav a:hover { color: var(--fg); }
+.nav nav a.cta { color: var(--tungsten); }
+
+/* Placeholder "photographs" */
+.ph { position: relative; overflow: hidden; background: var(--g); isolation: isolate; }
+.ph::after { content: ""; position: absolute; inset: 0; z-index: 1; opacity: .22; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.ph .tag { position: absolute; z-index: 2; top: 12px; right: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(235,228,220,.55); border: 1px solid rgba(235,228,220,.22); padding: 3px 7px; }
+
+/* Hero */
+.hero { padding-block: 28px 0; }
+.hero-frame { height: clamp(380px, 64vh, 700px); display: flex; align-items: flex-end; }
+.hero-copy { position: relative; z-index: 2; padding: clamp(22px, 4vw, 56px); max-width: 860px; }
+.hero h1 { font-size: clamp(44px, 8vw, 104px); line-height: .98; }
+.hero p { max-width: 46ch; color: #d8cfc6; margin: 18px 0 0; font-size: 18px; }
+.hero-frame::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(10,8,7,.85), rgba(10,8,7,.1) 60%); }
+.hero-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding-block: 14px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; color: var(--muted); border-bottom: 1px solid var(--line); }
+
+/* Gallery */
+section { padding-block: clamp(72px, 10vw, 128px); }
+.sec-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 36px; }
+.sec-head > div { display: grid; gap: 12px; min-width: 0; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { font: inherit; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; background: none; color: var(--muted); border: 1px solid var(--line); padding: 8px 14px; cursor: pointer; transition: color .2s, border-color .2s; }
+.filters button:hover { color: var(--fg); }
+.filters button[aria-pressed="true"] { color: var(--bg); background: var(--tungsten); border-color: var(--tungsten); }
+.grid { columns: 3 300px; column-gap: 14px; }
+.frame { break-inside: avoid; margin: 0 0 14px; display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: zoom-in; font: inherit; }
+.frame .ph { width: 100%; aspect-ratio: var(--r); transition: filter .4s; }
+.frame:hover .ph { filter: brightness(1.12); }
+.frame figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+.frame figcaption b { color: var(--tungsten); font-weight: 400; }
+.frame[hidden] { display: none !important; }
+
+/* Stories */
+.stories { background: var(--surface); border-block: 1px solid var(--line); }
+.story-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 28px; margin-top: 44px; }
+.story { display: grid; gap: 14px; }
+.story .ph { aspect-ratio: 4/5; }
+.story h3 { font-size: 28px; }
+.story p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.story .where { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--tungsten); text-transform: uppercase; }
+
+/* About */
+.about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+.about .ph { aspect-ratio: 4/5; max-width: 100%; }
+.about-text { display: grid; gap: 20px; max-width: 58ch; }
+.about-text p { margin: 0; color: #cfc6bd; }
+.sig { font-family: var(--display); font-style: italic; font-size: 30px; color: var(--tungsten); }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0; margin-top: 44px; border-top: 1px solid var(--line); }
+.step { padding: 26px 24px 8px 0; display: grid; gap: 10px; align-content: start; }
+.step .n { font-family: var(--mono); font-size: 12px; color: var(--tungsten); letter-spacing: .1em; }
+.step h3 { font-size: 24px; }
+.step p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); }
+.contact-info { display: grid; gap: 22px; align-content: start; }
+.contact-info dl { display: grid; gap: 16px; margin: 8px 0 0; }
+.contact-info dt { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.contact-info dd { margin: 2px 0 0; font-size: 18px; user-select: all; overflow-wrap: anywhere; }
+form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 20px; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+input, select, textarea { font: inherit; font-weight: 300; color: var(--fg); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 8px 0; border-radius: 0; width: 100%; }
+select option { background: var(--surface); }
+textarea { min-height: 120px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: var(--tungsten); }
+.submit { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.btn { font: inherit; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; background: var(--tungsten); color: #17120d; border: 0; padding: 15px 28px; cursor: pointer; font-weight: 500; transition: filter .2s; }
+.btn:hover { filter: brightness(1.08); }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+.note.ok { color: var(--tungsten); }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-block: 28px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; color: var(--muted); }
+
+/* Lightbox */
+.lb { position: fixed; inset: 0; z-index: 50; background: rgba(8,6,5,.96); display: grid; grid-template-rows: 1fr auto; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.lb-stage { display: grid; place-items: center; min-height: 0; }
+.lb-stage .ph { max-width: 100%; max-height: 100%; height: min(78vh, 900px); aspect-ratio: var(--r); }
+.lb-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); }
+.lb-bar b { color: var(--tungsten); font-weight: 400; }
+.lb-ctrl { display: flex; gap: 6px; }
+.lb button { font: inherit; background: none; color: var(--fg); border: 1px solid var(--line); padding: 8px 14px; cursor: pointer; }
+.lb button:hover { border-color: var(--tungsten); }
+
+@media (max-width: 760px) {
+  .nav nav a:not(.cta) { display: none; }
+  .about, .contact { grid-template-columns: 1fr; }
+  form { grid-template-columns: 1fr; }
+  .about .ph { max-width: 420px; }
+}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">KC <span>Photography</span></a>
+    <nav aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#stories">Stories</a>
+      <a href="#about">About</a>
+      <a class="cta" href="#enquire">Enquire</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="ph hero-frame" style="--g: radial-gradient(ellipse at 72% 30%, rgba(236,176,98,.55), transparent 42%), radial-gradient(circle at 20% 70%, rgba(150,70,48,.45), transparent 40%), radial-gradient(circle at 88% 78%, rgba(240,200,140,.3), transparent 22%), linear-gradient(160deg, #2a201b, #0d0a09 70%);">
+      <span class="tag">Hero photo</span>
+      <div class="hero-copy">
+        <span class="eyebrow">Wedding &amp; event photography · Australia</span>
+        <h1 style="margin-top:14px">The day, as it <em>actually</em> felt.</h1>
+        <p>Candlelit receptions, quiet moments before the aisle, and the speeches everyone will quote for years. Photographed honestly, edited with warmth.</p>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <span>Now booking 2027 &amp; 2028 dates</span>
+      <span>Available for travel Australia-wide</span>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="eyebrow">Selected work</span>
+          <h2>From first look to <em>last dance</em></h2>
+        </div>
+        <div class="filters" role="group" aria-label="Filter photos">
+          <button type="button" data-f="all" aria-pressed="true">All</button>
+          <button type="button" data-f="ceremony" aria-pressed="false">Ceremony</button>
+          <button type="button" data-f="portraits" aria-pressed="false">Portraits</button>
+          <button type="button" data-f="reception" aria-pressed="false">Reception</button>
+          <button type="button" data-f="details" aria-pressed="false">Details</button>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="stories" class="stories">
+    <div class="wrap">
+      <span class="eyebrow">Wedding stories</span>
+      <h2 style="margin-top:12px">Full days, <em>start to finish</em></h2>
+      <div class="story-list">
+        <article class="story">
+          <div class="ph" style="--g: radial-gradient(circle at 30% 35%, rgba(222,170,110,.5), transparent 45%), radial-gradient(circle at 75% 80%, rgba(90,110,80,.45), transparent 45%), linear-gradient(170deg, #241d17, #0e0c0a);"><span class="tag">Cover photo</span></div>
+          <span class="where">Hunter Valley · Vineyard</span>
+          <h3>Sarah &amp; James</h3>
+          <p>An autumn ceremony between the vines, followed by a long-table dinner under festoon lights.</p>
+        </article>
+        <article class="story">
+          <div class="ph" style="--g: radial-gradient(circle at 60% 25%, rgba(180,190,200,.35), transparent 40%), radial-gradient(circle at 25% 75%, rgba(200,140,90,.4), transparent 45%), linear-gradient(180deg, #1c1a1b, #0c0b0b);"><span class="tag">Cover photo</span></div>
+          <span class="where">Sydney · Harbourside</span>
+          <h3>Priya &amp; Tom</h3>
+          <p>A two-day celebration: a morning haldi at home, then an evening reception on the water.</p>
+        </article>
+        <article class="story">
+          <div class="ph" style="--g: radial-gradient(circle at 50% 40%, rgba(240,190,120,.5), transparent 35%), radial-gradient(circle at 15% 20%, rgba(130,60,50,.4), transparent 40%), linear-gradient(200deg, #271c16, #0b0908);"><span class="tag">Cover photo</span></div>
+          <span class="where">Blue Mountains · Lodge</span>
+          <h3>Mia &amp; Daniel</h3>
+          <p>A winter elopement with twelve guests, a fireplace, and fog rolling in over the valley.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <div class="ph" style="--g: radial-gradient(circle at 45% 38%, rgba(214,170,128,.5), transparent 32%), radial-gradient(circle at 80% 85%, rgba(110,80,60,.4), transparent 40%), linear-gradient(160deg, #221b17, #0d0b0a);"><span class="tag">Portrait of KC</span></div>
+      <div class="about-text">
+        <span class="eyebrow">About</span>
+        <h2>Hi, I'm <em>KC</em>.</h2>
+        <p>I photograph weddings and events for people who would rather be present than pose. Most of my day is spent quietly in the background, watching for the glance across the room or the laugh during the speeches.</p>
+        <p>I love low light: reception candles, golden hour, a dance floor lit by one string of bulbs. My editing keeps skin tones true and colours warm, so the photos still feel like the day decades from now.</p>
+        <p>Based in Australia and happy to travel. Every gallery is delivered online, ready to download and share.</p>
+        <span class="sig">KC</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">How it works</span>
+      <h2 style="margin-top:12px">From enquiry to <em>gallery</em></h2>
+      <div class="steps">
+        <div class="step"><span class="n">01 / Enquire</span><h3>Say hello</h3><p>Send your date, venue and a little about you. I'll reply within two business days.</p></div>
+        <div class="step"><span class="n">02 / Meet</span><h3>Have a chat</h3><p>A call or coffee to talk through the day, your timeline and the moments that matter to you.</p></div>
+        <div class="step"><span class="n">03 / The day</span><h3>Be present</h3><p>I follow the day as it happens, guiding gently for portraits and staying out of the way the rest of the time.</p></div>
+        <div class="step"><span class="n">04 / Delivery</span><h3>Your gallery</h3><p>A sneak peek within a week, then your full edited gallery within six to eight weeks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="enquire" class="stories">
+    <div class="wrap contact">
+      <div class="contact-info">
+        <span class="eyebrow">Enquire</span>
+        <h2>Tell me about <em>your day</em></h2>
+        <p class="note" style="font-size:16px">Dates book out 12 to 18 months ahead, so get in touch early if you have one in mind.</p>
+        <dl>
+          <div><dt>Email</dt><dd>hello@kcphotography.com.au</dd></div>
+          <div><dt>Phone</dt><dd>0400 000 000</dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://instagram.com/" target="_blank" rel="noopener">@kcphotography</a></dd></div>
+        </dl>
+      </div>
+      <form id="form" novalidate>
+        <div class="field"><label for="f-name">Your names</label><input id="f-name" name="name" autocomplete="name" placeholder="Sarah &amp; James" required></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <div class="field"><label for="f-date">Date</label><input id="f-date" name="date" type="date"></div>
+        <div class="field"><label for="f-type">Type of event</label>
+          <select id="f-type" name="type"><option>Wedding</option><option>Elopement</option><option>Engagement</option><option>Event or party</option></select></div>
+        <div class="field full"><label for="f-venue">Venue or location</label><input id="f-venue" name="venue" placeholder="Venue name, town"></div>
+        <div class="field full"><label for="f-msg">Tell me a bit about your plans</label><textarea id="f-msg" name="message" placeholder="Guest numbers, the feel you're going for, anything you'd love captured"></textarea></div>
+        <div class="submit">
+          <button class="btn" type="submit">Send enquiry</button>
+          <p class="note" id="form-note" role="status"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 KC Photography</span>
+    <span>Wedding &amp; event photography · Australia</span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lb-stage"><div class="ph" id="lb-ph"></div></div>
+  <div class="lb-bar">
+    <span id="lb-cap"></span>
+    <div class="lb-ctrl">
+      <button type="button" id="lb-prev" aria-label="Previous photo">←</button>
+      <button type="button" id="lb-next" aria-label="Next photo">→</button>
+      <button type="button" id="lb-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Placeholder frames. Replace each with a real image later: swap the .ph div for <img src="..." alt="...">.
+const photos = [
+  ["ceremony","Vows under the gum trees","4/5",[34,60,48],"35mm · f/1.8 · 1/250"],
+  ["portraits","Golden hour, paddock walk","3/2",[32,220,140],"85mm · f/1.4 · 1/800"],
+  ["reception","First dance, festoon lights","4/5",[38,30,40],"35mm · f/1.4 · 1/160"],
+  ["details","Rings on the invitation","1/1",[28,190,190],"100mm · f/2.8 · 1/200"],
+  ["reception","Speeches, father of the bride","3/2",[30,140,30],"50mm · f/1.8 · 1/200"],
+  ["portraits","Veil in the wind","2/3",[210,30,20],"85mm · f/2 · 1/1000"],
+  ["ceremony","Walking down the aisle","3/4",[36,100,170],"70mm · f/2.8 · 1/320"],
+  ["details","Table setting, candlelit","4/5",[40,35,15],"50mm · f/1.4 · 1/100"],
+  ["reception","Confetti exit","3/2",[20,330,40],"24mm · f/2.8 · 1/500"],
+  ["portraits","Quiet moment before the ceremony","4/5",[30,25,200],"50mm · f/1.4 · 1/160"],
+  ["ceremony","The kiss","3/2",[34,80,30],"35mm · f/2 · 1/400"],
+  ["details","Bouquet, native blooms","3/4",[350,90,30],"100mm · f/2.8 · 1/250"],
+];
+function grad(h, i) {
+  const [a, b, c] = h, x = 20 + (i * 37) % 60, y = 15 + (i * 23) % 55;
+  return `radial-gradient(circle at ${x}% ${y}%, hsla(${a},62%,62%,.55), transparent 38%),` +
+    `radial-gradient(circle at ${100-x}% ${95-y/2}%, hsla(${b},40%,42%,.42), transparent 42%),` +
+    `radial-gradient(circle at ${(x+40)%100}% ${(y+50)%100}%, hsla(${c},50%,55%,.28), transparent 26%),` +
+    `linear-gradient(${150 + i*13}deg, hsl(${a},18%,14%), hsl(${a},12%,5%) 75%)`;
+}
+const grid = document.getElementById("grid");
+photos.forEach(([cat, title, r, h, exif], i) => {
+  const fig = document.createElement("figure");
+  fig.className = "frame"; fig.tabIndex = 0; fig.dataset.cat = cat; fig.dataset.i = i;
+  fig.setAttribute("role", "button"); fig.setAttribute("aria-label", "Open photo: " + title);
+  fig.innerHTML = `<div class="ph" style="--r:${r};--g:${grad(h, i)}"><span class="tag">Photo ${String(i+1).padStart(2,"0")}</span></div>
+    <figcaption><span>${title}</span><b>${String(i+1).padStart(2,"0")}A ▸</b></figcaption>`;
+  grid.appendChild(fig);
+});
+
+// Filters
+const btns = document.querySelectorAll(".filters button");
+btns.forEach(b => b.addEventListener("click", () => {
+  btns.forEach(x => x.setAttribute("aria-pressed", x === b));
+  grid.querySelectorAll(".frame").forEach(f => f.hidden = b.dataset.f !== "all" && f.dataset.cat !== b.dataset.f);
+}));
+
+// Lightbox
+const lb = document.getElementById("lb"), lbPh = document.getElementById("lb-ph"), lbCap = document.getElementById("lb-cap");
+let cur = 0, lastFocus = null;
+const visible = () => [...grid.querySelectorAll(".frame:not([hidden])")].map(f => +f.dataset.i);
+function show(i) {
+  cur = i; const [cat, title, r, h, exif] = photos[i];
+  lbPh.style.setProperty("--r", r); lbPh.style.setProperty("--g", grad(h, i));
+  lbPh.innerHTML = `<span class="tag">Photo ${String(i+1).padStart(2,"0")}</span>`;
+  lbCap.innerHTML = `<b>${String(i+1).padStart(2,"0")}A</b> · ${title} · ${exif}`;
+}
+function open(i) { lastFocus = document.activeElement; show(i); lb.hidden = false; document.getElementById("lb-close").focus(); }
+function close() { lb.hidden = true; lastFocus && lastFocus.focus(); }
+function step(d) { const v = visible(), p = v.indexOf(cur); show(v[(p + d + v.length) % v.length]); }
+grid.addEventListener("click", e => { const f = e.target.closest(".frame"); if (f) open(+f.dataset.i); });
+grid.addEventListener("keydown", e => { const f = e.target.closest(".frame"); if (f && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); open(+f.dataset.i); } });
+document.getElementById("lb-close").onclick = close;
+document.getElementById("lb-prev").onclick = () => step(-1);
+document.getElementById("lb-next").onclick = () => step(1);
+lb.addEventListener("click", e => { if (e.target === lb || e.target.classList.contains("lb-stage")) close(); });
+document.addEventListener("keydown", e => {
+  if (lb.hidden) return;
+  if (e.key === "Escape") close(); else if (e.key === "ArrowRight") step(1); else if (e.key === "ArrowLeft") step(-1);
+});
+
+// Enquiry form (preview only; connect Formspree or similar to send for real)
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const note = document.getElementById("form-note"), name = e.target.name.value.trim(), email = e.target.email.value.trim();
+  if (!name || !/^\S+@\S+\.\S+$/.test(email)) { note.className = "note"; note.textContent = "Add your names and a valid email so KC can reply."; return; }
+  note.className = "note ok";
+  note.textContent = "Preview only: the form isn't connected to an inbox yet.";
+});
+</script>
