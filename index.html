@@ -257,9 +257,9 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         <h2>Tell me what you're <em>celebrating</em></h2>
         <p class="note" style="font-size:16px">Weekends fill up fast, especially for ceremonies and weddings, so get in touch as soon as you have a date in mind.</p>
         <dl>
-          <div><dt>Email</dt><dd>hello@kcphotography.com.au</dd></div>
-          <div><dt>Phone</dt><dd>0400 000 000</dd></div>
-          <div><dt>Instagram</dt><dd><a href="https://instagram.com/" target="_blank" rel="noopener">@kcphotography</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:ayushkc1111@gmail.com">ayushkc1111@gmail.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+61402702059">0402 702 059</a></dd></div>
+          <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/ayushkc_official" target="_blank" rel="noopener">@ayushkc_official</a></dd></div>
         </dl>
       </div>
       <form id="form" novalidate>
@@ -270,6 +270,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
           <select id="f-type" name="type"><option>Maternity shoot</option><option>Weaning ceremony</option><option>Birthday</option><option>Wedding</option><option>Other event</option></select></div>
         <div class="field full"><label for="f-venue">Venue or location</label><input id="f-venue" name="venue" placeholder="Venue name, town"></div>
         <div class="field full"><label for="f-msg">Tell me a bit about your plans</label><textarea id="f-msg" name="message" placeholder="What you're celebrating, guest numbers, anything you'd love captured"></textarea></div>
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <div class="submit">
           <button class="btn" type="submit">Send enquiry</button>
           <p class="note" id="form-note" role="status"></p>
@@ -401,13 +402,46 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") close(); else if (e.key === "ArrowRight") step(1); else if (e.key === "ArrowLeft") step(-1);
 });
 
-// Enquiry form (preview only; connect Formspree or similar to send for real)
-document.getElementById("form").addEventListener("submit", e => {
+// ================= ENQUIRY FORM =================
+// Paste the Web3Forms access key between the quotes below.
+// Enquiries go to the email address the key was created with.
+const WEB3FORMS_KEY = "643d890b-6504-45e3-ad05-e219d7d87311";
+// ================================================
+const form = document.getElementById("form"), note = document.getElementById("form-note"), sendBtn = form.querySelector(".btn");
+form.addEventListener("submit", async e => {
   e.preventDefault();
-  const note = document.getElementById("form-note"), name = e.target.name.value.trim(), email = e.target.email.value.trim();
+  const f = form.elements, name = f.name.value.trim(), email = f.email.value.trim();
   if (!name || !/^\S+@\S+\.\S+$/.test(email)) { note.className = "note"; note.textContent = "Add your name and a valid email so Ayush can reply."; return; }
-  note.className = "note ok";
-  note.textContent = "Preview only: the form isn't connected to an inbox yet.";
+  if (f.botcheck.checked) return; // spam bot filled the hidden box
+  if (WEB3FORMS_KEY.startsWith("PASTE")) { note.className = "note"; note.textContent = "The form isn't connected yet. Please email or call instead."; return; }
+  sendBtn.disabled = true; sendBtn.textContent = "Sending…"; note.className = "note"; note.textContent = "";
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `New enquiry: ${f.type.value} from ${name}`,
+        from_name: "KC Photography website",
+        replyto: email,
+        name, email,
+        "Date": f.date.value || "Not given",
+        "Type of shoot": f.type.value,
+        "Venue or location": f.venue.value.trim() || "Not given",
+        "Message": f.message.value.trim() || "(no message)"
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) throw new Error(data.message || "Send failed");
+    form.reset();
+    note.className = "note ok";
+    note.textContent = "Thanks! Your enquiry has been sent. Ayush will be in touch within two business days.";
+  } catch (err) {
+    note.className = "note";
+    note.textContent = "Sorry, that didn't send. Please try again, or email Ayush directly.";
+  } finally {
+    sendBtn.disabled = false; sendBtn.textContent = "Send enquiry";
+  }
 });
 </script>
 </body>
